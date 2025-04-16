@@ -8,8 +8,8 @@ const About: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold mb-2">About Teal Tracker</h1>
-        <p className="text-muted-foreground">Building better habits, one day at a time</p>
+        <h1 className="text-3xl font-bold mb-2">About Ur Tracker</h1>
+        <p className="text-muted-foreground">Empowering Personal Growth, One Day at a Time</p>
       </div>
       
       <Card className="border-muted bg-card/30 backdrop-blur-sm">
@@ -18,14 +18,14 @@ const About: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Teal Tracker was created to help people maintain their positive habits and track progress on their personal goals. 
-            We believe that consistent tracking and visual feedback can significantly improve motivation and success rates 
-            for forming new habits or breaking old ones.
+            Ur Tracker was created to help individuals maintain accountability and track personal milestones. 
+            We believe that consistent tracking and visual feedback can significantly improve motivation 
+            and success rates for forming new habits or breaking old ones.
           </p>
           <p>
-            Our simple yet powerful tracking system allows you to create custom titles for anything you want to track, 
-            from health goals like "Days Without Sugar" to productivity targets like "Daily Writing Streak" or personal 
-            development goals.
+            Our intuitive tracking system allows you to create custom titles for anything you want to monitor, 
+            from personal health goals like "Days Without Sugar" to productivity targets like "Daily Writing Streak" 
+            or personal development challenges.
           </p>
         </CardContent>
       </Card>
@@ -36,28 +36,29 @@ const About: React.FC = () => {
         </CardHeader>
         <CardContent>
           <ul className="list-disc list-inside space-y-2">
-            <li>Create custom tracking titles with personalized names and descriptions</li>
-            <li>Visual progress tracking with circular progress bars</li>
-            <li>Day counters to show your streak length</li>
-            <li>Secure user accounts to save your tracking data</li>
-            <li>Clean, intuitive interface focused on motivation</li>
-            <li>Mobile-friendly design for tracking on the go</li>
+            <li>Create personalized tracking titles with custom names and descriptions</li>
+            <li>Visualize progress with interactive circular progress bars</li>
+            <li>Track streak lengths with precise day counters</li>
+            <li>Secure user accounts to preserve your tracking data</li>
+            <li>Clean, motivational interface designed for personal growth</li>
+            <li>Fully responsive design for tracking anywhere, anytime</li>
           </ul>
         </CardContent>
       </Card>
       
       <Card className="border-muted bg-card/30 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>About the Company</CardTitle>
+          <CardTitle>About the Platform</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Teal Tracker is brought to you by [Your Company Name], a dedicated team focused on creating tools that 
-            help people improve their lives through better habits and personal tracking.
+            Ur Tracker is a passion project dedicated to helping individuals take control of their personal 
+            development journey. We understand that growth is a personal and unique experience, and our 
+            platform is designed to support you every step of the way.
           </p>
           <p>
-            Founded in [Year], we've been helping thousands of users achieve their personal goals through our 
-            intuitive tracking applications and motivational tools.
+            Built with simplicity and motivation in mind, Ur Tracker provides the tools you need to 
+            turn your goals into lasting habits.
           </p>
           <div className="flex flex-wrap gap-4 pt-4">
             <Button variant="outline" className="flex items-center">
@@ -77,9 +78,9 @@ const About: React.FC = () => {
       </Card>
       
       <div className="text-center text-sm text-muted-foreground pt-4">
-        <p>&copy; 2025 [Your Company Name]. All rights reserved.</p>
+        <p>&copy; 2025 Ur Tracker. All rights reserved.</p>
         <p className="mt-1">
-          Made with ❤️ by our dedicated team.
+          Crafted with ❤️ to help you grow.
         </p>
       </div>
     </div>
@@ -87,3 +88,4 @@ const About: React.FC = () => {
 };
 
 export default About;
+

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Layout, LayoutContent, LayoutHeader } from '@/components/ui/layout';
@@ -80,7 +79,7 @@ const MainLayout: React.FC = () => {
                 </div>
               </SheetContent>
             </Sheet>
-            <h1 className="text-lg md:text-xl font-bold text-teal-400">Teal Tracker</h1>
+            <h1 className="text-lg md:text-xl font-bold text-teal-400">Ur Tracker</h1>
           </div>
           
           <div className="hidden md:flex items-center space-x-4">

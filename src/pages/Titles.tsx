@@ -2,9 +2,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Title, useTracking } from '@/contexts/TrackingContext';
 import { Loader2, Plus, Pencil, Trash2, RotateCcw } from 'lucide-react';
 import {
@@ -27,93 +24,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-
-const TitleForm: React.FC<{
-  initialData?: Title;
-  onSubmit: (data: Omit<Title, 'id'> | Partial<Omit<Title, 'id'>>) => void;
-  onCancel: () => void;
-  isEdit?: boolean;
-}> = ({ initialData, onSubmit, onCancel, isEdit = false }) => {
-  const [name, setName] = useState(initialData?.name || '');
-  const [description, setDescription] = useState(initialData?.description || '');
-  const [color, setColor] = useState(initialData?.color || '#06b6d4');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name) return;
-    
-    setIsSubmitting(true);
-    
-    const data = {
-      name,
-      description,
-      color,
-      ...(isEdit ? {} : { startDate: new Date().toISOString() })
-    };
-    
-    onSubmit(data);
-  };
-  
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Title Name</Label>
-        <Input
-          id="name"
-          placeholder="e.g., No Junk Food, Daily Exercise"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="bg-background/50"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="description">Description (Optional)</Label>
-        <Textarea
-          id="description"
-          placeholder="Add some details about this tracking goal"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="bg-background/50 resize-none"
-          rows={3}
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="color">Color</Label>
-        <div className="flex items-center space-x-4">
-          <Input
-            id="color"
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            className="w-16 h-10 p-1 bg-background/50"
-          />
-          <div className="flex-1">
-            <Input
-              type="text"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="bg-background/50"
-            />
-          </div>
-        </div>
-      </div>
-      <DialogFooter>
-        <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>
-          Cancel
-        </Button>
-        <Button 
-          type="submit" 
-          className="bg-teal-600 hover:bg-teal-700"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Saving...' : isEdit ? 'Update Title' : 'Create Title'}
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-};
+import { Progress } from '@/components/ui/progress';
+import TitleForm from '@/components/TitleForm';
 
 const TitleCard: React.FC<{
   title: Title;
@@ -122,7 +34,7 @@ const TitleCard: React.FC<{
   onReset: (id: string) => void;
 }> = ({ title, onEdit, onDelete, onReset }) => {
   const { calculateProgress } = useTracking();
-  const { days } = calculateProgress(title);
+  const { days, percentage } = calculateProgress(title);
   
   return (
     <Card className="border-muted bg-card/30 backdrop-blur-sm">
@@ -143,15 +55,26 @@ const TitleCard: React.FC<{
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-sm text-muted-foreground mb-2">
           Started {new Date(title.startDate).toLocaleDateString()}
         </p>
-        <div className="flex items-center justify-center">
+        
+        <div className="flex items-center justify-center mb-4">
           <div className="text-center">
             <span className="text-3xl font-bold block">{days}</span>
             <span className="text-xs text-muted-foreground">days</span>
           </div>
         </div>
+        
+        {title.targetDays && (
+          <div className="w-full mb-2">
+            <div className="flex justify-between text-xs mb-1">
+              <span>{Math.min(days, title.targetDays)}/{title.targetDays}</span>
+              <span>{percentage}%</span>
+            </div>
+            <Progress value={percentage} className="h-2" />
+          </div>
+        )}
       </CardContent>
       <CardFooter className="grid grid-cols-3 gap-2 pt-0">
         <Button 

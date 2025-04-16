@@ -3,21 +3,28 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTracking } from '@/contexts/TrackingContext';
 import { Button } from '@/components/ui/button';
-import { Loader2, Plus } from 'lucide-react';
+import { Loader2, Plus, Minus, ChevronUp, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Progress } from '@/components/ui/progress';
 
 const ProgressCircle = ({ 
   percentage,
   days,
   title,
   description,
-  color = "#06b6d4"  
+  color = "#06b6d4",
+  targetDays,
+  onIncrement,
+  onDecrement
 }: { 
   percentage: number;
   days: number;
   title: string;
   description?: string;
   color?: string;
+  targetDays?: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
 }) => {
   // Set the circumference for the circle
   const size = 150;
@@ -61,16 +68,43 @@ const ProgressCircle = ({
       </div>
       <h3 className="text-lg font-medium mt-4 text-center">{title}</h3>
       {description && (
-        <p className="text-sm text-muted-foreground text-center mt-1">
+        <p className="text-sm text-muted-foreground text-center mt-1 mb-2">
           {description}
         </p>
       )}
+      {targetDays && (
+        <div className="w-full mt-1 mb-3">
+          <div className="flex justify-between text-xs mb-1">
+            <span>{days} days</span>
+            <span>{targetDays} days</span>
+          </div>
+          <Progress value={percentage} className="h-2" />
+        </div>
+      )}
+      <div className="flex space-x-3 mt-2">
+        <Button 
+          variant="outline" 
+          size="icon"
+          className="h-8 w-8 rounded-full bg-transparent border-gray-600 hover:bg-gray-800"
+          onClick={onDecrement}
+        >
+          <Minus className="h-3 w-3" />
+        </Button>
+        <Button 
+          variant="outline" 
+          size="icon"
+          className="h-8 w-8 rounded-full bg-transparent border-gray-600 hover:bg-gray-800"
+          onClick={onIncrement}
+        >
+          <Plus className="h-3 w-3" />
+        </Button>
+      </div>
     </div>
   );
 };
 
 const Dashboard: React.FC = () => {
-  const { titles, calculateProgress, isLoading } = useTracking();
+  const { titles, calculateProgress, incrementDays, decrementDays, isLoading } = useTracking();
   
   if (isLoading) {
     return (
@@ -126,6 +160,9 @@ const Dashboard: React.FC = () => {
                     title={title.name}
                     description={title.description}
                     color={title.color}
+                    targetDays={title.targetDays}
+                    onIncrement={() => incrementDays(title.id)}
+                    onDecrement={() => decrementDays(title.id)}
                   />
                 </CardContent>
               </Card>

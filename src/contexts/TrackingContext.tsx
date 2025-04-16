@@ -9,6 +9,7 @@ export type Title = {
   startDate: string;
   description?: string;
   color?: string;
+  targetDays?: number;
 };
 
 type TrackingContextType = {
@@ -18,6 +19,8 @@ type TrackingContextType = {
   deleteTitle: (id: string) => void;
   resetTitle: (id: string) => void;
   calculateProgress: (title: Title) => { days: number; percentage: number };
+  incrementDays: (id: string) => void;
+  decrementDays: (id: string) => void;
   isLoading: boolean;
 };
 
@@ -46,14 +49,16 @@ export const TrackingProvider = ({ children }: { children: React.ReactNode }) =>
             name: 'No Junk Food',
             startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
             description: 'Staying away from unhealthy snacks',
-            color: '#06b6d4'
+            color: '#06b6d4',
+            targetDays: 30
           },
           {
             id: 'example2',
             name: 'Daily Exercise',
             startDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
             description: 'At least 30 minutes per day',
-            color: '#14b8a6'
+            color: '#14b8a6',
+            targetDays: 15
           }
         ];
         setTitles(exampleTitles);
@@ -134,6 +139,43 @@ export const TrackingProvider = ({ children }: { children: React.ReactNode }) =>
     });
   };
 
+  const incrementDays = (id: string) => {
+    if (!user) return;
+    
+    setTitles(prev => 
+      prev.map(t => {
+        if (t.id === id) {
+          // Move the start date back by 1 day (incrementing the days count)
+          const startDate = new Date(t.startDate);
+          startDate.setDate(startDate.getDate() - 1);
+          return { ...t, startDate: startDate.toISOString() };
+        }
+        return t;
+      })
+    );
+  };
+
+  const decrementDays = (id: string) => {
+    if (!user) return;
+    
+    setTitles(prev => 
+      prev.map(t => {
+        if (t.id === id) {
+          // Move the start date forward by 1 day (decrementing the days count)
+          const startDate = new Date(t.startDate);
+          const now = new Date();
+          
+          // Prevent decreasing below 0 days
+          if (startDate < now) {
+            startDate.setDate(startDate.getDate() + 1);
+            return { ...t, startDate: startDate.toISOString() };
+          }
+        }
+        return t;
+      })
+    );
+  };
+
   const calculateProgress = (title: Title) => {
     const start = new Date(title.startDate);
     const now = new Date();
@@ -143,8 +185,7 @@ export const TrackingProvider = ({ children }: { children: React.ReactNode }) =>
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
     // Calculate percentage (capped at 100%)
-    // We'll say 100% is 30 days for this example
-    const maxDays = 30;
+    const maxDays = title.targetDays || 30; // Default to 30 days if no target
     const percentage = Math.min(Math.round((diffDays / maxDays) * 100), 100);
     
     return { days: diffDays, percentage };
@@ -157,6 +198,8 @@ export const TrackingProvider = ({ children }: { children: React.ReactNode }) =>
     deleteTitle,
     resetTitle,
     calculateProgress,
+    incrementDays,
+    decrementDays,
     isLoading
   };
 
